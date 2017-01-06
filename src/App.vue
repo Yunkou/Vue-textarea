@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img class="logo" src="https://ww3.sinaimg.cn/large/006y8lVagw1fbhebeyucrj305k05kmx4.jpg">
+    <img class="logo" src="http://ww3.sinaimg.cn/large/006y8lVagw1fbhebeyucrj305k05kmx4.jpg">
     <h1>{{ msg }}</h1>
 <!--     <h2>Emoji</h2>
     <ul class="emoji-btn">
