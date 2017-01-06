@@ -65,6 +65,7 @@ export default {
       let tmpStr = textarea.value
       if (inPos) {
         textarea.value = tmpStr.substring(0, inPos.start) + tmpStr.substring(inPos.end, tmpStr.length)
+        this.peoplePos.splice(inPos.index, 1)
       }
     },
     bindLeft () {
@@ -79,9 +80,10 @@ export default {
     isInPos (pos) {
       if (!this.peoplePos.length) { return false }
       let inPos = false
-      this.peoplePos.forEach((el) => {
+      this.peoplePos.forEach((el, index) => {
         if (pos > el.start && pos < el.end) {
           inPos = el
+          inPos.index = index
           return
         }
       })
