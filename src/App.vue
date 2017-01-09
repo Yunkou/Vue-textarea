@@ -30,7 +30,8 @@ export default {
     return {
       msg: 'Vue-textarea支持at和表情的输入框',
       people: ['路飞', '山治', '索隆', '娜美', '乔巴', '罗宾'],
-      peoplePos: []
+      peoplePos: [],
+      textValue: ''
     }
   },
   methods: {
@@ -41,11 +42,6 @@ export default {
       let endPos = textarea.selectionEnd
       let cursorPos = startPos
       let tmpStr = textarea.value
-      let pos = {
-        start: startPos,
-        end: startPos + p.length
-      }
-      this.peoplePos.push(pos)
       textarea.value = tmpStr.substring(0, startPos) + p + tmpStr.substring(endPos, tmpStr.length)
       cursorPos += p.length
       textarea.selectionStart = textarea.selectionEnd = cursorPos
@@ -54,6 +50,7 @@ export default {
       let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
       let inPos = this.isInPos(startPos)
+      this.updatePos(textarea.value)
       if (inPos) {
         textarea.selectionStart = inPos.end
       }
@@ -63,6 +60,7 @@ export default {
       let startPos = textarea.selectionStart
       let inPos = this.isInPos(startPos)
       let tmpStr = textarea.value
+      this.updatePos(tmpStr)
       if (inPos) {
         textarea.value = tmpStr.substring(0, inPos.start) + tmpStr.substring(inPos.end, tmpStr.length)
         this.peoplePos.splice(inPos.index, 1)
@@ -73,6 +71,7 @@ export default {
       let startPos = textarea.selectionStart
       let inPos = this.isInPos(startPos)
       let tmpStr = textarea.value
+      this.updatePos(tmpStr)
       if (inPos) {
         textarea.selectionStart = inPos.start
       }
@@ -88,6 +87,17 @@ export default {
         }
       })
       return inPos
+    },
+    updatePos (val) {
+      const REX = /@\S+ /g
+      let arr
+      while ((arr = REX.exec(val)) !== null) {
+        let pos = {
+          start: arr.index,
+          end: REX.lastIndex
+        }
+        this.peoplePos.push(pos)
+      }
     }
   }
 }
