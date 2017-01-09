@@ -5,7 +5,7 @@
     <h2>At Someone</h2>
     <ul class="at-some">
       <li v-for="p in people">
-        <button @click="addAt(` @${p} `)">{{ p }}</button>
+        <button @click="addAt(`@${p} `)">{{ p }}</button>
       </li>
     </ul>
     <div class="area-box">
