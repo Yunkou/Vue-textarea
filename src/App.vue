@@ -35,6 +35,7 @@ export default {
       let endPos = textarea.selectionEnd
       let cursorPos = startPos
       let tmpStr = textarea.value
+      this.updatePos(tmpStr)
       textarea.value = tmpStr.substring(0, startPos) + p + tmpStr.substring(endPos, tmpStr.length)
       cursorPos += p.length
       textarea.selectionStart = textarea.selectionEnd = cursorPos
@@ -84,13 +85,15 @@ export default {
     updatePos (val) {
       const REX = /@\S+ /g
       let arr
+      let posArr = []
       while ((arr = REX.exec(val)) !== null) {
         let pos = {
           start: arr.index,
           end: REX.lastIndex
         }
-        this.peoplePos.push(pos)
+        posArr.push(pos)
       }
+      this.peoplePos = posArr
     }
   }
 }
