@@ -52,9 +52,9 @@ export default {
     bindDel () {
       let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
+      this.updatePos(textarea.value)
       let inPos = this.isInPos(startPos)
       let tmpStr = textarea.value
-      this.updatePos(tmpStr)
       if (inPos) {
         textarea.value = tmpStr.substring(0, inPos.start) + tmpStr.substring(inPos.end, tmpStr.length)
         this.peoplePos.splice(inPos.index, 1)
