@@ -43,8 +43,8 @@ export default {
     bindClick () {
       let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
-      let inPos = this.isInPos(startPos)
       this.updatePos(textarea.value)
+      let inPos = this.isInPos(startPos)
       if (inPos) {
         textarea.selectionStart = inPos.end
       }
@@ -63,9 +63,9 @@ export default {
     bindLeft () {
       let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
+      this.updatePos(tmpStr)
       let inPos = this.isInPos(startPos)
       let tmpStr = textarea.value
-      this.updatePos(tmpStr)
       if (inPos) {
         textarea.selectionStart = inPos.start
       }
