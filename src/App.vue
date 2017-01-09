@@ -35,10 +35,10 @@ export default {
       let endPos = textarea.selectionEnd
       let cursorPos = startPos
       let tmpStr = textarea.value
-      this.updatePos(tmpStr)
       textarea.value = tmpStr.substring(0, startPos) + p + tmpStr.substring(endPos, tmpStr.length)
       cursorPos += p.length
       textarea.selectionStart = textarea.selectionEnd = cursorPos
+      this.updatePos(textarea.value)
     },
     bindClick () {
       let textarea = document.querySelector('textarea')
