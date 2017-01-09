@@ -2,13 +2,6 @@
   <div id="app">
     <img class="logo" src="http://ww3.sinaimg.cn/large/006y8lVagw1fbhebeyucrj305k05kmx4.jpg">
     <h1>{{ msg }}</h1>
-<!--     <h2>Emoji</h2>
-    <ul class="emoji-btn">
-      <li><button>🎉</button></li>
-      <li><button>🔖</button></li>
-      <li><button>✨</button></li>
-      <li><button>🐛</button></li>
-    </ul> -->
     <h2>At Someone</h2>
     <ul class="at-some">
       <li v-for="p in people">
