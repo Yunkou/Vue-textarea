@@ -18,7 +18,6 @@
 </template>
 
 <script>
-var textarea = document.querySelector('textarea')
 export default {
   name: 'app',
   data () {
@@ -31,6 +30,7 @@ export default {
   },
   methods: {
     addAt (p) {
+      let textarea = document.querySelector('textarea')
       textarea.focus()
       let startPos = textarea.selectionStart
       let endPos = textarea.selectionEnd
@@ -42,6 +42,7 @@ export default {
       this.updatePos(textarea.value)
     },
     bindClick () {
+      let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
       this.updatePos(textarea.value)
       let inPos = this.isInPos(startPos)
@@ -50,6 +51,7 @@ export default {
       }
     },
     bindDel () {
+      let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
       let inPos = this.isInPos(startPos)
       let tmpStr = textarea.value
@@ -61,6 +63,7 @@ export default {
       this.updatePos(textarea.value)
     },
     bindLeft () {
+      let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
       this.updatePos(tmpStr)
       let inPos = this.isInPos(startPos)
