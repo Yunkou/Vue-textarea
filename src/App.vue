@@ -2,13 +2,6 @@
   <div id="app">
     <img class="logo" src="http://ww3.sinaimg.cn/large/006y8lVagw1fbhebeyucrj305k05kmx4.jpg">
     <h1>{{ msg }}</h1>
-<!--     <h2>Emoji</h2>
-    <ul class="emoji-btn">
-      <li><button>🎉</button></li>
-      <li><button>🔖</button></li>
-      <li><button>✨</button></li>
-      <li><button>🐛</button></li>
-    </ul> -->
     <h2>At Someone</h2>
     <ul class="at-some">
       <li v-for="p in people">
@@ -20,6 +13,7 @@
           @keyup.left="bindLeft" @keyup.right="bindClick">
       </textarea>
     </div>
+    <pre>{{ peoplePos|json }}</pre>
   </div>
 </template>
 
@@ -42,16 +36,16 @@ export default {
       let endPos = textarea.selectionEnd
       let cursorPos = startPos
       let tmpStr = textarea.value
-      this.updatePos(tmpStr)
       textarea.value = tmpStr.substring(0, startPos) + p + tmpStr.substring(endPos, tmpStr.length)
       cursorPos += p.length
       textarea.selectionStart = textarea.selectionEnd = cursorPos
+      this.updatePos(textarea.value)
     },
     bindClick () {
       let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
-      let inPos = this.isInPos(startPos)
       this.updatePos(textarea.value)
+      let inPos = this.isInPos(startPos)
       if (inPos) {
         textarea.selectionStart = inPos.end
       }
@@ -63,7 +57,8 @@ export default {
       let tmpStr = textarea.value
       this.updatePos(tmpStr)
       if (inPos) {
-        textarea.value = tmpStr.substring(0, inPos.start) + tmpStr.substring(inPos.end, tmpStr.length)
+        textarea.value = tmpStr.substring(0, inPos.start + 1) + tmpStr.substring(inPos.end - 1, tmpStr.length)
+        textarea.selectionStart = textarea.selectionEnd = inPos.start + 1
         this.peoplePos.splice(inPos.index, 1)
       }
     },
@@ -74,7 +69,7 @@ export default {
       let tmpStr = textarea.value
       this.updatePos(tmpStr)
       if (inPos) {
-        textarea.selectionStart = inPos.start
+        textarea.selectionStart = textarea.selectionEnd = inPos.start
       }
     },
     isInPos (pos) {
@@ -90,7 +85,7 @@ export default {
       return inPos
     },
     updatePos (val) {
-      const REX = /@\S+ /g
+      const REX = /\s@\S+\s/g
       let arr
       let posArr = []
       while ((arr = REX.exec(val)) !== null) {
