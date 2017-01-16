@@ -10,7 +10,7 @@
     </ul>
     <div class="area-box">
       <textarea @click="bindClick" @keyup.delete="bindDel"
-          @keyup.left="bindLeft" @keyup.right="bindClick">
+          @keyup.left="bindLeft" @keyup.right="bindRight">
       </textarea>
     </div>
     <pre>{{ peoplePos|json }}</pre>
@@ -65,9 +65,8 @@ export default {
     bindLeft () {
       let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
-      this.updatePos(tmpStr)
+      this.updatePos(textarea.value)
       let inPos = this.isInPos(startPos)
-      let tmpStr = textarea.value
       if (inPos) {
         textarea.selectionStart = textarea.selectionEnd = inPos.start
       }
@@ -75,9 +74,8 @@ export default {
     bindRight () {
       let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
-      this.updatePos(tmpStr)
+      this.updatePos(textarea.value)
       let inPos = this.isInPos(startPos)
-      let tmpStr = textarea.value
       if (inPos) {
         textarea.selectionStart = textarea.selectionEnd = inPos.end
       }
