@@ -13,10 +13,12 @@
           @keyup.left="bindLeft" @keyup.right="bindClick">
       </textarea>
     </div>
+    <pre>{{ peoplePos|json }}</pre>
   </div>
 </template>
 
 <script>
+var textarea = document.querySelector('textarea')
 export default {
   name: 'app',
   data () {
@@ -29,7 +31,6 @@ export default {
   },
   methods: {
     addAt (p) {
-      let textarea = document.querySelector('textarea')
       textarea.focus()
       let startPos = textarea.selectionStart
       let endPos = textarea.selectionEnd
@@ -41,7 +42,6 @@ export default {
       this.updatePos(textarea.value)
     },
     bindClick () {
-      let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
       this.updatePos(textarea.value)
       let inPos = this.isInPos(startPos)
@@ -50,24 +50,23 @@ export default {
       }
     },
     bindDel () {
-      let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
       let inPos = this.isInPos(startPos)
       let tmpStr = textarea.value
       if (inPos) {
-        textarea.value = tmpStr.substring(0, inPos.start) + tmpStr.substring(inPos.end, tmpStr.length)
+        textarea.value = tmpStr.substring(0, inPos.start + 1) + tmpStr.substring(inPos.end - 1, tmpStr.length)
+        textarea.selectionStart = textarea.selectionEnd = inPos.start + 1
         this.peoplePos.splice(inPos.index, 1)
       }
       this.updatePos(textarea.value)
     },
     bindLeft () {
-      let textarea = document.querySelector('textarea')
       let startPos = textarea.selectionStart
       this.updatePos(tmpStr)
       let inPos = this.isInPos(startPos)
       let tmpStr = textarea.value
       if (inPos) {
-        textarea.selectionStart = inPos.start
+        textarea.selectionStart = textarea.selectionEnd = inPos.start
       }
     },
     isInPos (pos) {
@@ -83,7 +82,7 @@ export default {
       return inPos
     },
     updatePos (val) {
-      const REX = /@\S+ /g
+      const REX = /\s@\S+\s/g
       let arr
       let posArr = []
       while ((arr = REX.exec(val)) !== null) {
