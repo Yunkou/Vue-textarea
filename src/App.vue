@@ -67,7 +67,6 @@ export default {
       let startPos = textarea.selectionStart
       let inPos = this.isInPos(startPos)
       let tmpStr = textarea.value
-      this.updatePos(tmpStr)
       if (inPos) {
         textarea.selectionStart = textarea.selectionEnd = inPos.start
       }
