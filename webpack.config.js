@@ -6,7 +6,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'build.[hash].js'
+    filename: 'build.js'
   },
   module: {
     rules: [
@@ -33,7 +33,7 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[hash].[ext]'
+          name: '[name].[ext]?[hash]'
         }
       }
     ]

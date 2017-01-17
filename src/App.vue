@@ -8,10 +8,18 @@
         <button @click="addAt(` @${p} `)">{{ p }}</button>
       </li>
     </ul>
+    <div>{{atListIndex}}</div>
     <div class="area-box">
-      <textarea @click="bindClick" @keyup.delete="bindDel"
-          @keyup.left="bindLeft" @keyup.right="bindRight">
+      <ul class="at-list" v-show="showAtlist">
+        <li v-for="(p, index) in people" :class="{'current': atListIndex === index}">@{{ p }}</li>
+      </ul>
+      <textarea @click="bindClick" @keyup.delete="bindDel" v-model="textValue"
+          @keyup.left="bindLeft" @keyup.right="bindRight" @keydown.50="logkey"
+          @keydown.up="moveIndex($event, -1)" @keydown.down="moveIndex($event, 1)"
+          @keydown.enter="enterAddAt($event)">
       </textarea>
+      <pre class="textarea" v-html="textValue"></pre>
+      <p>这个pre没什么鸟用，辅助计算位置的</p>
     </div>
   </div>
 </template>
@@ -24,7 +32,14 @@ export default {
       msg: 'Vue-textarea支持at和表情的输入框',
       people: ['路飞', '山治', '索隆', '娜美', '乔巴', '罗宾'],
       peoplePos: [],
-      textValue: ''
+      textValue: '',
+      atListIndex: 0,
+      showAtlist: false
+    }
+  },
+  computed: {
+    textValueCopy () {
+      return this.textValue.replace(/@/g, '<span>@</span>')
     }
   },
   methods: {
@@ -34,11 +49,11 @@ export default {
       let startPos = textarea.selectionStart
       let endPos = textarea.selectionEnd
       let cursorPos = startPos
-      let tmpStr = textarea.value
-      textarea.value = tmpStr.substring(0, startPos) + p + tmpStr.substring(endPos, tmpStr.length)
+      let tmpStr = this.textValue
+      this.textValue = tmpStr.substring(0, startPos) + p + tmpStr.substring(endPos, tmpStr.length)
       cursorPos += p.length
       textarea.selectionStart = textarea.selectionEnd = cursorPos
-      this.updatePos(textarea.value)
+      this.updatePos(this.textValue)
     },
     bindClick () {
       let textarea = document.querySelector('textarea')
@@ -103,6 +118,32 @@ export default {
         posArr.push(pos)
       }
       this.peoplePos = posArr
+    },
+    logkey (e) {
+      if (!e.shiftKey) { return }
+      this.showAtlist = true
+      let index = document.querySelector('textarea').selectionStart
+      let tmpStr = this.textValue
+      this.textValueCopy = tmpStr.substring(0, index) + '<span></span>' + tmpStr.substring(index, tmpStr.length)
+    },
+    moveIndex (e, n) {
+      if (!this.showAtlist) { return }
+      e.preventDefault()
+      this.atListIndex += n
+      if (this.atListIndex === -1) {
+        this.atListIndex = 0
+      }
+      if (this.atListIndex > this.people.length - 1) {
+        this.atListIndex = this.people.length - 1
+      }
+
+    },
+    enterAddAt (e) {
+      if (!this.showAtlist) { return }
+      e.preventDefault()
+      this.addAt(` @${this.people[this.atListIndex]} `)
+      this.showAtlist = false
+      this.atListIndex = 0
     }
   }
 }
@@ -146,13 +187,43 @@ export default {
   }
 
   .area-box {
+    position: relative;
     width: 375px;
     height: 150px;
     margin: 30px auto;
   }
 
-  textarea {
+  .at-list {
+    margin: 0;
+    position: absolute;
+    width: 50px;
+    left: -60px;
+    top: 0;
+    border: 1px solid #42b983;
+  }
+
+  .at-list li {
+    margin: 0;
+    padding: .2em 0;
     display: block;
+    font-size: 12px;
+    border-bottom: 1px solid #42b983;
+  }
+
+  .at-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .at-list li.current {
+    background: #42b983;
+    color: #ffffff;
+  }
+
+  textarea, .textarea {
+    display: block;
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     width: 375px;
     height: 150px;
     padding: 15px;
@@ -160,5 +231,9 @@ export default {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
+    text-align: left;
+    font-size: 14px;
+    overflow-y: auto;
+    white-space: pre-wrap;
   }
 </style>
