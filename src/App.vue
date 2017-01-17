@@ -13,7 +13,6 @@
           @keyup.left="bindLeft" @keyup.right="bindRight">
       </textarea>
     </div>
-    <pre>{{ peoplePos|json }}</pre>
   </div>
 </template>
 
