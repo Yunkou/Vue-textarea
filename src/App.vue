@@ -10,7 +10,7 @@
     </ul>
     <div>{{atListIndex}}</div>
     <div class="area-box">
-      <ul class="at-list" v-show="showAtlist">
+      <ul class="at-list" v-show="showAtlist" :style="atListPos">
         <li v-for="(p, index) in people" :class="{'current': atListIndex === index}">@{{ p }}</li>
       </ul>
       <textarea @click="bindClick" @keyup.delete="bindDel" v-model="textValue"
@@ -18,9 +18,9 @@
           @keydown.up="moveIndex($event, -1)" @keydown.down="moveIndex($event, 1)"
           @keydown.enter="enterAddAt($event)">
       </textarea>
-      <pre class="textarea" v-html="textValue"></pre>
-      <p>这个pre没什么鸟用，辅助计算位置的</p>
     </div>
+    <pre class="textarea"></pre>
+    <p>这个pre没什么鸟用，辅助计算位置的</p>
   </div>
 </template>
 
@@ -34,12 +34,12 @@ export default {
       peoplePos: [],
       textValue: '',
       atListIndex: 0,
-      showAtlist: false
-    }
-  },
-  computed: {
-    textValueCopy () {
-      return this.textValue.replace(/@/g, '<span>@</span>')
+      showAtlist: false,
+      textValueCopy: '',
+      atListPos: {
+        left: '0px',
+        bottom: '150px'
+      }
     }
   },
   methods: {
@@ -121,10 +121,19 @@ export default {
     },
     logkey (e) {
       if (!e.shiftKey) { return }
-      this.showAtlist = true
       let index = document.querySelector('textarea').selectionStart
       let tmpStr = this.textValue
-      this.textValueCopy = tmpStr.substring(0, index) + '<span></span>' + tmpStr.substring(index, tmpStr.length)
+      let pre = document.querySelector('.textarea')
+      pre.innerHTML = tmpStr.substring(0, index) + '<span></span>' + tmpStr.substring(index, tmpStr.length)
+      let span = pre.querySelector('span')
+      let left = span.offsetLeft - pre.offsetLeft
+      let bottom = 150 - (span.offsetTop - pre.offsetTop)
+      console.log(left, bottom)
+      this.atListPos = {
+        left: left + 'px',
+        bottom: bottom + 'px'
+      }
+      this.showAtlist = true
     },
     moveIndex (e, n) {
       if (!this.showAtlist) { return }
@@ -198,8 +207,10 @@ export default {
     position: absolute;
     width: 50px;
     left: -60px;
-    top: 0;
     border: 1px solid #42b983;
+    max-height: 150px;
+    overflow-y: auto;
+    background: #ffffff;
   }
 
   .at-list li {
@@ -227,6 +238,7 @@ export default {
     width: 375px;
     height: 150px;
     padding: 15px;
+    margin: 0 auto;
     border: 1px solid #42b983;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -235,5 +247,11 @@ export default {
     font-size: 14px;
     overflow-y: auto;
     white-space: pre-wrap;
+  }
+  .textarea span {
+    display: inline-block;
+    width: 0;
+    height: 14px;
+    vertical-align: middle;
   }
 </style>
