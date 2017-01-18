@@ -20,7 +20,6 @@
       </textarea>
     </div>
     <pre class="textarea"></pre>
-    <p>这个pre没什么鸟用，辅助计算位置的</p>
   </div>
 </template>
 
@@ -253,5 +252,8 @@ export default {
     width: 0;
     height: 14px;
     vertical-align: middle;
+  }
+  .textarea {
+    visibility: hidden;
   }
 </style>
