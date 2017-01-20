@@ -127,12 +127,17 @@ export default {
       let span = pre.querySelector('span')
       let left = span.offsetLeft - pre.offsetLeft
       let bottom = 150 - (span.offsetTop - pre.offsetTop)
-      console.log(left, bottom)
+      // 小于0时根据滚动高度来计算位置
+      if (bottom < 0) {
+        let scrollHeight = pre.scrollHeight
+        bottom = scrollHeight - 10 - (span.offsetTop - pre.offsetTop)
+      }
       this.atListPos = {
-        left: left + 'px',
+        left: left + 10 + 'px',
         bottom: bottom + 'px'
       }
       this.showAtlist = true
+      return false
     },
     moveIndex (e, n) {
       if (!this.showAtlist) { return }
@@ -152,6 +157,7 @@ export default {
       this.addAt(` @${this.people[this.atListIndex]} `)
       this.showAtlist = false
       this.atListIndex = 0
+      console.log(this.textValue)
     }
   }
 }
